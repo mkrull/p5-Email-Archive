@@ -1,0 +1,4 @@
+nix the storage_class attribute.
+focus on just archiving messages, not retrieving them
+support different backends along the DBI/JSON axis, not along the DBI/DBIC axis
+KISS. The current design is not
