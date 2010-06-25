@@ -1,5 +1,6 @@
 package Email::Archive::Storage::DBI;
 use Moose;
+use Carp;
 use DBI;
 use File::ShareDir 'module_file';
 use File::Slurp 'read_file';
@@ -8,12 +9,6 @@ use Email::Abstract;
 use SQL::Abstract;
 use autodie;
 with q/Email::Archive::Storage/;
-
-has dsn => (
-  is  => 'ro',
-  isa => 'Str',
-  required => 1,
-);
 
 has sqla => (
   is   => 'ro',
@@ -41,7 +36,8 @@ has deployed_schema_version => (
   default => 0,
 );
 
-my $SCHEMA_VERSION = 0;
+
+my $SCHEMA_VERSION = 1;
 
 sub store {
   my ($self, $email) = @_;
@@ -88,9 +84,18 @@ sub _deploy {
   $self->do($sql);
 }
 
-sub BUILD {
+sub _deployed {
   my ($self) = @_;
-  $self->dbh(DBI->connect($self->dsn));
+  my $schema_version = eval { $self->selectcol_array('SELECT schema_version FROM metadata') };
+  if(defined $schema_version and $schema_version =~ /^\d+$/) {
+    $self->deployed_schema_version($schema_version);
+    return $schema_version =~ /^\d+$/;
+  }
+}
+
+sub db_connect {
+  my ($self, $dsn) = @_;
+  $self->dbh(DBI->connect($dsn));
   if(!$self->_deployed) {
     $self->_deploy;
   }
@@ -98,15 +103,6 @@ sub BUILD {
     croak sprintf "Schema version %d not supported; we support version " .
                   "$SCHEMA_VERSION. Please upgrade your schema before "  .
                   "continuing.", $self->_deployed_schema_version;
-  }
-}
-
-sub _deployed {
-  my ($self) = @_;
-  my $schema_version = eval { $self->selectcol_array('SELECT schema_version FROM metadata') };
-  if(defined $schema_version and $schema_version =~ /^\d+$/) {
-    $self->deployed_schema_version($schema_version);
-    return $schema_version =~ /^\d+$/;
   }
 }
 

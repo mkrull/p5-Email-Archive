@@ -1,6 +1,6 @@
 package Email::Archive;
 use Moose;
-use Module::Load;
+use Email::Archive::Storage::DBI;
 
 has storage => (
   is    => 'rw',
@@ -10,26 +10,8 @@ has storage => (
     retrieve
     search
   /],
-  lazy_build  => 1,
+  lazy  => 1,
+  default => sub { Email::Archive::Storage::DBI->new }
 );
-
-has dsn => (
-  is  => 'ro',
-  isa => 'Str',
-  required => 1,
-);
-
-has storage_class => (
-  is  => 'ro',
-  isa => 'Str',
-  required => 1,
-  default  => 'Email::Archive::Storage::DBI',
-);
-
-sub _build_storage {
-  my ($self) = @_;
-  load $self->storage_class;
-  my $storage = $self->storage_class->new(dsn => $self->dsn);
-}
 
 1;

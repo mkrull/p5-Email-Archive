@@ -4,12 +4,11 @@ use warnings;
 use Email::Simple;
 use Email::Simple::Creator;
 
-use lib 'lib';
 use Email::Archive;
 
 my $email = Email::Simple->create(
     header => [
-      From    => 'casey@geeknest.com',
+      From    => 'foo@example.com',
       To      => 'drain@example.com',
       Subject => 'Message in a bottle',
       'Message-ID' => 'helloworld',
@@ -17,7 +16,8 @@ my $email = Email::Simple->create(
     body => 'hello there!'
 );
 
-my $e = Email::Archive->new({dsn => 'dbi:SQLite:dbname=test.db'});
+my $e = Email::Archive->new();
+$e->storage->db_connect('dbi:SQLite:dbname=test.db');
 print "sending @{[$email->as_string]}\n";
 $e->store($email);
 
