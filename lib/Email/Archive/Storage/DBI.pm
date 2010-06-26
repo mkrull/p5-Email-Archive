@@ -93,7 +93,7 @@ sub _deployed {
   }
 }
 
-sub db_connect {
+sub storage_connect {
   my ($self, $dsn) = @_;
   $self->dbh(DBI->connect($dsn));
   if(!$self->_deployed) {

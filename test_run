@@ -17,7 +17,7 @@ my $email = Email::Simple->create(
 );
 
 my $e = Email::Archive->new();
-$e->storage->db_connect('dbi:SQLite:dbname=test.db');
+$e->connect('dbi:SQLite:dbname=test.db');
 print "sending @{[$email->as_string]}\n";
 $e->store($email);
 
