@@ -1,8 +1,0 @@
-INSERT INTO messages (
-  message_id,
-  from_addr,
-  to_addr,
-  cc,
-  subject,
-  body
-) VALUES (?, ?, ?, ?, ?, ?);
