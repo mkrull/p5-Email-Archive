@@ -4,7 +4,7 @@ use Carp;
 use DBI;
 use File::ShareDir 'module_file';
 use File::Slurp 'read_file';
-use Email::Simple::Creator;
+use Email::MIME;
 use Email::Abstract;
 use SQL::Abstract;
 use autodie;
@@ -62,7 +62,7 @@ sub search {
   my $sth = $self->prepare($sql);
   $sth->execute(@bind);
   my ($message) = $sth->fetchrow_hashref;
-  return Email::Simple->create(
+  return Email::MIME->create(
     header => [
       From    => $message->{from_addr},
       To      => $message->{to_addr},
