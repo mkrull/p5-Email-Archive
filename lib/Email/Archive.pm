@@ -1,5 +1,5 @@
 package Email::Archive;
-use Moose;
+use Moo;
 use Email::Archive::Storage::DBI;
 
 our $VERSION = '0.02';
