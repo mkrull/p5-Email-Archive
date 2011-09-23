@@ -19,7 +19,7 @@ has storage => (
 1;
 
 
-__END__ 
+__END__
 
 =head1 NAME
 
