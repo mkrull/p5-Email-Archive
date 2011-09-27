@@ -1,9 +1,9 @@
-package Email::Archive::Storage::DBI;
+package Email::Archive::Storage::DBIC;
 use Moo;
 use Carp;
 use Email::MIME;
 use Email::Abstract;
-use Email::Archive::Schema;
+use Email::Archive::Storage::DBIC::Schema;
 use autodie;
 use Try::Tiny;
 with q/Email::Archive::Storage/;
@@ -11,7 +11,7 @@ with q/Email::Archive::Storage/;
 has schema => (
   is => 'rw',
   isa => sub {
-    ref $_[0] eq 'Email::Archive::Schema' or die "schema must be a Email::Archive schema",
+    ref $_[0] eq 'Email::Archive::Storage::DBIC::Schema' or die "schema must be a Email::Archive::Storage::DBIC schema",
   },
 );
 
@@ -67,9 +67,9 @@ sub _deployed {
   return $deployed;
 }
 
-sub storage_connect_dbic {
+sub storage_connect {
   my ($self, $dsn) = @_;
-  $self->schema(Email::Archive::Schema->connect($dsn));
+  $self->schema(Email::Archive::Storage::DBIC::Schema->connect($dsn));
   my $deployed = $self->_deployed;
   $self->_deploy unless $deployed;
 }

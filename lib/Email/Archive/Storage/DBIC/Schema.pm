@@ -1,4 +1,4 @@
-package Email::Archive::Schema;
+package Email::Archive::Storage::DBIC::Schema;
 
 use strict;
 use warnings;

@@ -1,4 +1,4 @@
-package Email::Archive::Schema::Result::Messages;
+package Email::Archive::Storage::DBIC::Schema::Result::Messages;
 
 use strict;
 use warnings;
