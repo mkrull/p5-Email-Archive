@@ -28,5 +28,6 @@ cmp_ok($found->header('subject'), 'eq', "Message in a bottle",
 
 done_testing;
 
+# cleanup
 unlink 't/test.db';
 
