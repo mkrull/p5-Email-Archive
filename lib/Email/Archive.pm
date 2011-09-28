@@ -31,6 +31,10 @@ I only uploaded this to get it out there and kick myself into making it more
 useful. As you can see it's not documented or tested yet. I put this together
 mostly in one evening in a coffeeshop. It shows in some ways. caveat programmer.
 
+=head1 SYNOPSIS
+
+Email::Archive provides an interface to store emails. Storage engines should implement 
+
 =head1 LICENSE
 
 This library may be used under the same terms as Perl itself.
