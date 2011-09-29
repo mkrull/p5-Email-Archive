@@ -76,3 +76,73 @@ sub storage_connect {
 
 1;
 
+__END__
+
+=head1 NAME
+
+Email::Archive::Storage::DBIC - write emails to relational databases
+
+=head1 SYNOPSIS
+
+Email::Archive::Storage::DBIC is a storage engine for Email::Archive
+to store emails in databases utilizing DBIx::Class.
+
+All methods should work like documented in Email::Archive. Construction
+is slightly different as you have to tell Email::Archive to use the storage.
+
+    my $dbic_archive = Email::Archive->new(
+        storage => Email::Archive::Storage::DBIC->new,
+    );
+
+=head1 METHODS
+
+=head2 connect
+
+Takes a DBI connection string as parameter.
+
+    $email_archive->connect('dbi:SQLite:dbname=emails');
+
+For more information see DBI documentation.
+
+If the database schema does not exist it will be deployed automatically by
+the connect method.
+
+=head2 store
+
+    $email_archive->store($msg);
+
+Where $msg could be anything feedable to Email::Abstract. That is a raw
+email, an Email::MIME object or even an Email::Abstract object.
+
+The message will be stored in the messages table of the connected database.
+
+=head2 search
+
+    $email_archive->search($attributes);
+
+Search the database for emails where $attributes is a hashref containing
+the fields to search and the values filter.
+
+    $attributes = { from_addr => $addr };
+
+Will return the first found result as Email::MIME object.
+
+    $email_archive->search({ message_id => $some_id });
+
+Is exactly the same as retrieval by Message-ID.
+
+=head2 retrieve
+
+    $email_archive->retrieve($msg_id);
+
+Retrieve emails by Message-ID. Is a shortcut for
+
+    $email_archive->search({ message_id => $some_id });
+
+=head1 LICENSE
+
+This library may be used under the same terms as Perl itself.
+
+=head1 AUTHOR AND COPYRIGHT
+
+Copyright (c) 2010, 2011 Chris Nehren C<apeiron@cpan.org>.
